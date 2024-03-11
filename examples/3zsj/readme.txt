@@ -15,7 +15,7 @@ pip install e3nn
 pip install deepdiff
 
 
-LD_LIBRARY_PATH=${CONDA_PREFIX}/lib/python3.8/site-packages/nvidia/cuda_nvrtc/lib/ PYTHONPATH="." python rf2aa/run_inference_sep.py --config-name=protein database_params.hhdb=dummy_database/dummydb protein_inputs.A.fasta_file=../examples/3zsj.fas checkpoint_path=../weights/RFAA_paper_weights.pt job_name=testrun output_path=examples/3zsj/ +sm_inputs.B="" +sm_inputs.B.input=examples/3zsj/PRD_900004.smiles +sm_inputs.B.input_type=smiles
+LD_LIBRARY_PATH=${CONDA_PREFIX}/lib/python3.8/site-packages/nvidia/cuda_nvrtc/lib/ PYTHONPATH="." python rf2aa/run_inference_sep.py --config-name=protein database_params.hhdb=dummy_database/dummydb protein_inputs.A.fasta_file=examples/3zsj.fas checkpoint_path=../weights/RFAA_paper_weights.pt job_name=testrun output_path=examples/3zsj/ +sm_inputs.B="" +sm_inputs.B.input=examples/3zsj/PRD_900004.smiles +sm_inputs.B.input_type=smiles
 
 /home/ubuntu8/work/RFAA/RoseTTAFold-All-Atom/examples/3zsj/Conformer3D_COMPOUND_CID_6134.sdf
 は 20240310 に https://pubchem.ncbi.nlm.nih.gov/compound/6134#section=GlyTouCan-Accession Downlowd 3D Conformer から DL。
