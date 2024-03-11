@@ -28,6 +28,8 @@ def get_templates(
         seq_parsed,
         ids_parsed,
     ) = parse_templates_raw(ffdb, hhr_fn=hhr_fn, atab_fn=atab_fn)
+    if xyz_parsed is None:
+        return None,None,None,None
     tplt = {
         "xyz": xyz_parsed.unsqueeze(0),
         "mask": mask_parsed.unsqueeze(0),
@@ -61,7 +63,7 @@ def load_protein(msa_file, hhr_fn, atab_fn, model_runner):
     L = msa.shape[1]
     if hhr_fn is None or atab_fn is None:
         print("No templates provided")
-        xyz_t, t1d, mask_t, _ = blank_template(1, L)
+        xyz_t, t1d, mask_t, _ = blank_template(model_runner.config.loader_params.n_templ, L)
     else:
         xyz_t, t1d, mask_t, _ = get_templates(
             L,
@@ -72,6 +74,8 @@ def load_protein(msa_file, hhr_fn, atab_fn, model_runner):
             n_templ=model_runner.config.loader_params.n_templ,
             deterministic=model_runner.deterministic,
         )
+        if xyz_t is None:
+            xyz_t, t1d, mask_t, _ = blank_template(model_runner.config.loader_params.n_templ, L)
 
     bond_feats = get_protein_bond_feats(L)
     chirals = torch.zeros(0, 5)

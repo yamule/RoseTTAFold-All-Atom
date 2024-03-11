@@ -5,6 +5,7 @@ run_digs.sh
 *.pdb
 .vscode
 slurm_logs/
+outputs/
 */output/
 */notebooks/
 */models/

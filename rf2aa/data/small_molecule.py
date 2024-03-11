@@ -1,5 +1,5 @@
 import torch
-
+import os;
 from rf2aa.data.data_loader import RawInputData
 from rf2aa.data.data_loader_utils import blank_template
 from rf2aa.data.parsers import parse_mol
@@ -9,10 +9,13 @@ from rf2aa.util import get_bond_feats, get_nxgraph, get_atom_frames
 
 def load_small_molecule(input_file, input_type, model_runner):
     if input_type == "smiles":
-        is_string = True
+        if os.path.exists(input_file):
+            print("Load SMILES from ",input_file,flush=True);
+            is_string = False;
+        else:
+            is_string = True
     else:
         is_string = False
-
     obmol, msa, ins, xyz, mask = parse_mol(
         input_file, filetype=input_type, string=is_string, generate_conformer=True
     )

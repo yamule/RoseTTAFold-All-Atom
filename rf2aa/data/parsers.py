@@ -611,7 +611,8 @@ def parse_templates(item, params):
         mask.append(data[5][sel2])
         qmap.append(np.stack([qi[sel1]-1,[counter]*ncol],axis=-1))
         counter += 1
-
+    if len(xyz) == 0:
+        return None,None,None,None,None,None
     xyz = np.vstack(xyz).astype(np.float32)
     mask = np.vstack(mask).astype(bool)
     qmap = np.vstack(qmap).astype(np.long)
@@ -680,6 +681,9 @@ def parse_templates_raw(ffdb, hhr_fn, atab_fn, max_templ=20):
         seq.append(data[-1][sel2])
         qmap.append(np.stack([qi[sel1]-1,[counter]*ncol],axis=-1))
         counter += 1
+
+    if len(xyz) == 0:
+        return None,None,None,None,None,None,None
 
     xyz = np.vstack(xyz).astype(np.float32)
     mask = np.vstack(mask).astype(bool)
@@ -800,13 +804,13 @@ def parse_mol(filename, filetype="mol2", string=False, remove_H=True, find_autom
     atomtypes = [ChemData().atomnum2atomtype.get(obmol.GetAtom(i).GetAtomicNum(), 'ATM') 
                  for i in range(1, obmol.NumAtoms()+1)]
     msa = torch.tensor([ChemData().aa2num[x] for x in atomtypes])
+    # msa と書いているが、原子のインデクスのリストのようだ。炭素は 39。
     ins = torch.zeros_like(msa)
 
     atom_coords = torch.tensor([[obmol.GetAtom(i).x(),obmol.GetAtom(i).y(), obmol.GetAtom(i).z()] 
                                 for i in range(1, obmol.NumAtoms()+1)]).unsqueeze(0) # (1, natoms, 3)
     mask = torch.full(atom_coords.shape[:-1], True) # (1, natoms,)
-
+    
     if find_automorphs:
         atom_coords, mask = util.get_automorphs(obmol, atom_coords[0], mask[0])
-
     return obmol, msa, ins, atom_coords, mask
